@@ -1,0 +1,8 @@
+#ifndef STDAVR_NAMESPACE_HPP
+#define STDAVR_NAMESPACE_HPP
+
+#ifndef STDAVR_NAMESPACE
+#define STDAVR_NAMESPACE std
+#endif
+
+#endif
