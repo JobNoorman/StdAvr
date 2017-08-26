@@ -52,6 +52,11 @@ public:
         return size_;
     }
 
+    bool empty() const noexcept
+    {
+        return size() == 0;
+    }
+
     iterator begin() noexcept
     {
         return const_cast<iterator>(const_cast<const vector*>(this)->begin());

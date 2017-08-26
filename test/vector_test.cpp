@@ -52,3 +52,10 @@ TEST(a_vector, has_the_same_elements_as_the_source_vector_it_was_copied_from)
 
     ASSERT_THAT(vec, ElementsAreArray(source_vec));
 }
+
+TEST(a_vector, is_empty_when_it_has_no_elements)
+{
+    auto vec = sut::vector<some_type>();
+
+    ASSERT_TRUE(vec.empty());
+}
