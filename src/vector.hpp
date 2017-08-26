@@ -24,13 +24,16 @@ public:
     {
     }
 
-    vector(size_type count, const T& value)
-        : data_{static_cast<value_type*>(
-                    ::operator new[](count * sizeof(value_type)))},
-          size_{count}, capacity_{count}
+    vector(size_type count, const T& value) : vector{allocate_tag{}, count}
     {
         for (auto& element : *this)
             new (&element) T(value);
+    }
+
+    explicit vector(size_type count) : vector{allocate_tag{}, count}
+    {
+        for (auto& element : *this)
+            new (&element) T();
     }
 
     ~vector()
@@ -74,6 +77,15 @@ public:
     }
 
 private:
+
+    struct allocate_tag{};
+
+    vector(allocate_tag, size_t count)
+    : data_{static_cast<value_type*>(
+                ::operator new[](count * sizeof(value_type)))},
+        size_{count}, capacity_{count}
+    {
+    }
 
     value_type* data_;
     size_type size_;

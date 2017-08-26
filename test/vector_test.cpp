@@ -28,9 +28,16 @@ TEST(a_vector, has_the_given_size_when_constructed)
     ASSERT_THAT(vec.size(), Eq(some_size));
 }
 
-TEST(a_vector, contains_only_elements_equal_to_the_given_value)
+TEST(a_vector, contains_count_elements_equal_to_the_given_value)
 {
     auto vec = sut::vector<some_type>(3, some_value);
 
     ASSERT_THAT(vec, ElementsAreArray({some_value, some_value, some_value}));
+}
+
+TEST(a_vector, contains_count_default_constructed_elements_when_no_value_given)
+{
+    auto vec = sut::vector<some_type>(3);
+
+    ASSERT_THAT(vec, ElementsAreArray({some_type{}, some_type{}, some_type{}}));
 }
