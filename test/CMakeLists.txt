@@ -6,6 +6,7 @@ set(SOURCES
     utility_test.cpp
     tuple_test.cpp
     vector_test.cpp
+    algorithm_test.cpp
 )
 
 add_executable(stdavr-test ${SOURCES})
