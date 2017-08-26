@@ -41,3 +41,14 @@ TEST(a_vector, contains_count_default_constructed_elements_when_no_value_given)
 
     ASSERT_THAT(vec, ElementsAreArray({some_type{}, some_type{}, some_type{}}));
 }
+
+
+
+TEST(a_vector, has_the_same_elements_as_the_source_vector_it_was_copied_from)
+{
+    auto source_vec = sut::vector(some_size, some_value);
+
+    auto vec = sut::vector(source_vec);
+
+    ASSERT_THAT(vec, ElementsAreArray(source_vec));
+}

@@ -24,6 +24,14 @@ public:
     {
     }
 
+    vector(const vector& other) : vector(allocate_tag{}, other.size())
+    {
+        auto other_it = other.begin();
+
+        for (auto& element : *this)
+            new (&element) T(*other_it++);
+    }
+
     vector(size_type count, const T& value) : vector{allocate_tag{}, count}
     {
         for (auto& element : *this)
