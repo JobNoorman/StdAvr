@@ -4,8 +4,7 @@
 #include "namespace.hpp"
 #include "type_traits.hpp"
 #include "utility.hpp"
-
-#include <stddef.h>
+#include "cstddef.hpp"
 
 namespace STDAVR_NAMESPACE
 {

@@ -25,6 +25,7 @@ function(publish_header name)
     file(WRITE ${PUBLIC_HEADERS_DIR}/${name} "#include \"${impl_header_rel_path}\"\n")
 endfunction()
 
+publish_header(cstddef)
 publish_header(type_traits)
 publish_header(utility)
 publish_header(tuple)
