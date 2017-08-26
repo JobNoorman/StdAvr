@@ -30,6 +30,7 @@ publish_header(cstdint)
 publish_header(type_traits)
 publish_header(utility)
 publish_header(tuple)
+publish_header(vector)
 
 add_compile_options(-Wall -std=c++17)
 

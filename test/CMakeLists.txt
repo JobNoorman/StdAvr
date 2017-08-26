@@ -5,6 +5,7 @@ set(SOURCES
     type_traits_test.cpp
     utility_test.cpp
     tuple_test.cpp
+    vector_test.cpp
 )
 
 add_executable(stdavr-test ${SOURCES})
