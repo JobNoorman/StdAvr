@@ -2,7 +2,6 @@
 #define STDAVR_VECTOR_HPP
 
 #include "namespace.hpp"
-#include "algorithm.hpp"
 #include "initializer_list.hpp"
 #include "cstddef.hpp"
 
@@ -28,7 +27,10 @@ public:
 
     vector(const vector& other) : vector(allocate_tag{}, other.size())
     {
-        copy(other.begin(), other.end(), begin());
+        auto other_it = other.begin();
+
+        for (auto& element : *this)
+            new (&element) T(*other_it++);
     }
 
     vector(size_type count, const T& value) : vector(allocate_tag{}, count)
