@@ -40,6 +40,16 @@ struct tuple_size<const volatile T> : tuple_size<T> {};
 template<class T>
 inline constexpr size_t tuple_size_v = tuple_size<T>::value;
 
+// TODO Disable when T is not move constructible/assignable.
+// TODO Add noexcept
+template<class T>
+void swap(T& a, T& b)
+{
+    auto tmp_a = move(a);
+    a = move(b);
+    b = move(tmp_a);
+}
+
 }
 
 #endif
