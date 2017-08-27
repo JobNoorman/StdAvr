@@ -32,6 +32,7 @@ publish_header(utility)
 publish_header(tuple)
 publish_header(vector)
 publish_header(algorithm)
+publish_header(iterator)
 
 add_compile_options(-Wall -std=c++17)
 
