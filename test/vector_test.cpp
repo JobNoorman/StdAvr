@@ -67,3 +67,22 @@ TEST(a_vector, contains_the_element_from_the_given_initializer_list)
 
     ASSERT_THAT(vec, ElementsAreArray(some_initializer_list));
 }
+
+TEST(a_vector, has_the_same_elements_as_the_source_vector_it_was_moved_from)
+{
+    auto source_vec = sut::vector(some_initializer_list);
+    auto source_copy = source_vec;
+
+    auto vec = sut::vector(std::move(source_vec));
+
+    ASSERT_THAT(vec, ElementsAreArray(source_copy));
+}
+
+TEST(a_vector, is_empty_after_being_moved_from)
+{
+    auto source_vec = sut::vector(some_initializer_list);
+
+    sut::vector(std::move(source_vec));
+
+    ASSERT_TRUE(source_vec.empty());
+}

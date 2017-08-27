@@ -53,6 +53,12 @@ public:
             new (&element) T(*il_it++);
     }
 
+    vector(vector&& other) noexcept : data_{other.data_}, size_{other.size_}
+    {
+        other.data_ = nullptr;
+        other.size_ = 0;
+    }
+
     ~vector()
     {
         delete[] data_;
