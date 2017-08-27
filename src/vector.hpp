@@ -65,6 +65,13 @@ public:
         delete[] data_;
     }
 
+    vector& operator=(const vector& other)
+    {
+        auto copy = other;
+        swap(copy);
+        return *this;
+    }
+
     size_type size() const noexcept
     {
         return size_;
