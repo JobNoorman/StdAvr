@@ -2,6 +2,7 @@
 #define STDAVR_VECTOR_HPP
 
 #include "namespace.hpp"
+#include "utility.hpp"
 #include "initializer_list.hpp"
 #include "cstddef.hpp"
 
@@ -104,6 +105,15 @@ public:
         return end();
     }
 
+    // TODO Add noexcept
+    void swap(vector& other)
+    {
+        using STDAVR_NAMESPACE::swap;
+        swap(data_, other.data_);
+        swap(size_, other.size_);
+        swap(capacity_, other.capacity_);
+    }
+
 private:
 
     struct allocate_tag{};
@@ -119,6 +129,12 @@ private:
     size_type size_;
     size_type capacity_;
 };
+
+template<class T>
+void swap(vector<T>& lhs, vector<T>& rhs) noexcept(noexcept(lhs.swap(rhs)))
+{
+    lhs.swap(rhs);
+}
 
 }
 

@@ -12,6 +12,8 @@ using some_type = int;
 const sut::size_t some_size = 5;
 const some_type some_value = 42;
 auto some_initializer_list = {2, 5, 1, 7, 5};
+auto some_vec1 = sut::vector{2, 4, 3, 8};
+auto some_vec2 = sut::vector{4, 2, 5, 6, 9, 0};
 
 }
 
@@ -85,4 +87,26 @@ TEST(a_vector, is_empty_after_being_moved_from)
     sut::vector(std::move(source_vec));
 
     ASSERT_TRUE(source_vec.empty());
+}
+
+TEST(a_vector, has_the_same_elements_as_the_other_vector_after_swap)
+{
+    auto vec1 = some_vec1;
+    auto vec2 = some_vec2;
+
+    vec1.swap(vec2);
+
+    ASSERT_THAT(vec1, ElementsAreArray(some_vec2));
+    ASSERT_THAT(vec2, ElementsAreArray(some_vec1));
+}
+
+TEST(a_vector, has_the_same_elements_as_the_other_vector_after_std_swap)
+{
+    auto vec1 = some_vec1;
+    auto vec2 = some_vec2;
+
+    sut::swap(vec1, vec2);
+
+    ASSERT_THAT(vec1, ElementsAreArray(some_vec2));
+    ASSERT_THAT(vec2, ElementsAreArray(some_vec1));
 }
