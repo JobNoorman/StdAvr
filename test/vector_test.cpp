@@ -11,6 +11,7 @@ using some_type = int;
 
 const sut::size_t some_size = 5;
 const some_type some_value = 42;
+auto some_initializer_list = {2, 5, 1, 7, 5};
 
 }
 
@@ -58,4 +59,11 @@ TEST(a_vector, is_empty_when_it_has_no_elements)
     auto vec = sut::vector<some_type>();
 
     ASSERT_TRUE(vec.empty());
+}
+
+TEST(a_vector, contains_the_element_from_the_given_initializer_list)
+{
+    auto vec = sut::vector<some_type>(some_initializer_list);
+
+    ASSERT_THAT(vec, ElementsAreArray(some_initializer_list));
 }

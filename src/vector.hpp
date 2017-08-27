@@ -3,6 +3,7 @@
 
 #include "namespace.hpp"
 #include "algorithm.hpp"
+#include "initializer_list.hpp"
 #include "cstddef.hpp"
 
 namespace STDAVR_NAMESPACE
@@ -40,6 +41,14 @@ public:
     {
         for (auto& element : *this)
             new (&element) T();
+    }
+
+    vector(std::initializer_list<T> il) : vector{allocate_tag{}, il.size()}
+    {
+        auto il_it = il.begin();
+
+        for (auto& element : *this)
+            new (&element) T(*il_it++);
     }
 
     ~vector()
