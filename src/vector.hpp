@@ -79,6 +79,13 @@ public:
         return *this;
     }
 
+    vector& operator=(std::initializer_list<T> il)
+    {
+        auto vec = vector(il);
+        swap(vec);
+        return *this;
+    }
+
     size_type size() const noexcept
     {
         return size_;

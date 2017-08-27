@@ -110,6 +110,17 @@ TEST(a_vector, has_the_same_elements_as_the_source_vector_it_was_move_assigned_f
     ASSERT_THAT(vec, ElementsAreArray(source_copy));
 }
 
+TEST(a_vector, has_the_same_elements_as_the_source_initializer_list_it_was_assigned_from)
+{
+    auto source_vec = sut::vector(some_initializer_list);
+    auto source_copy = source_vec;
+
+    decltype(sut::vector(some_initializer_list)) vec;
+    vec = some_initializer_list;
+
+    ASSERT_THAT(vec, ElementsAreArray(some_initializer_list));
+}
+
 TEST(a_vector, has_the_same_elements_as_the_other_vector_after_swap)
 {
     auto vec1 = some_vec1;
