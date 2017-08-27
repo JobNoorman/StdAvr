@@ -99,6 +99,17 @@ TEST(a_vector, has_the_same_elements_as_the_source_vector_it_was_assigned_from)
     ASSERT_THAT(vec, ElementsAreArray(source_vec));
 }
 
+TEST(a_vector, has_the_same_elements_as_the_source_vector_it_was_move_assigned_from)
+{
+    auto source_vec = sut::vector(some_initializer_list);
+    auto source_copy = source_vec;
+
+    decltype(source_vec) vec;
+    vec = std::move(source_vec);
+
+    ASSERT_THAT(vec, ElementsAreArray(source_copy));
+}
+
 TEST(a_vector, has_the_same_elements_as_the_other_vector_after_swap)
 {
     auto vec1 = some_vec1;

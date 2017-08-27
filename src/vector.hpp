@@ -72,6 +72,13 @@ public:
         return *this;
     }
 
+    // TODO Add noexcept
+    vector& operator=(vector&& other)
+    {
+        swap(other);
+        return *this;
+    }
+
     size_type size() const noexcept
     {
         return size_;
