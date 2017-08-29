@@ -8,6 +8,7 @@ namespace
 {
 
 using some_type = int;
+using some_type2 = double;
 
 }
 
@@ -42,4 +43,11 @@ TEST(remove_reference, removes_lvalue_reference_but_keeps_cv_intact)
     using type_without_reference = sut::remove_reference_t<type>;
 
     StaticAssertTypeEq<type_without_reference, base_type>();
+}
+
+TEST(void_t, is_void_given_any_number_of_type_arguments)
+{
+    StaticAssertTypeEq<sut::void_t<>, void>();
+    StaticAssertTypeEq<sut::void_t<some_type>, void>();
+    StaticAssertTypeEq<sut::void_t<some_type, some_type2>, void>();
 }
