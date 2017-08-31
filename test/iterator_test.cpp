@@ -12,6 +12,15 @@ namespace
 using some_type = int;
 some_type some_value = 53;
 
+struct some_iterator
+{
+    using value_type = double;
+    using difference_type = char;
+    using pointer = long&;
+    using reference = const char*;
+    using iterator_category = sut::forward_iterator_tag;
+};
+
 struct container_mock
 {
     MOCK_METHOD0(begin, some_type());
@@ -77,4 +86,40 @@ TEST_F(end, returns_the_address_of_the_given_array)
     auto end = sut::end(array);
 
     ASSERT_THAT(end, Eq(array + sizeof(array) / sizeof(array[0])));
+}
+
+TEST(iterator_traits, supports_pointers)
+{
+    using traits = sut::iterator_traits<some_type*>;
+
+    StaticAssertTypeEq<traits::value_type, some_type>();
+    StaticAssertTypeEq<traits::difference_type, sut::ptrdiff_t>();
+    StaticAssertTypeEq<traits::pointer, some_type*>();
+    StaticAssertTypeEq<traits::reference, some_type&>();
+    StaticAssertTypeEq<traits::iterator_category,
+                       sut::random_access_iterator_tag>();
+}
+
+TEST(iterator_traits, supports_const_pointers)
+{
+    using traits = sut::iterator_traits<const some_type*>;
+
+    StaticAssertTypeEq<traits::value_type, some_type>();
+    StaticAssertTypeEq<traits::difference_type, sut::ptrdiff_t>();
+    StaticAssertTypeEq<traits::pointer, const some_type*>();
+    StaticAssertTypeEq<traits::reference, const some_type&>();
+    StaticAssertTypeEq<traits::iterator_category,
+    sut::random_access_iterator_tag>();
+}
+
+TEST(iterator_traits, supports_iterators)
+{
+    using traits = sut::iterator_traits<some_iterator>;
+
+    StaticAssertTypeEq<traits::value_type, some_iterator::value_type>();
+    StaticAssertTypeEq<traits::difference_type, some_iterator::difference_type>();
+    StaticAssertTypeEq<traits::pointer, some_iterator::pointer>();
+    StaticAssertTypeEq<traits::reference, some_iterator::reference>();
+    StaticAssertTypeEq<traits::iterator_category,
+                       some_iterator::iterator_category>();
 }
