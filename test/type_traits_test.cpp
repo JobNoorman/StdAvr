@@ -82,18 +82,18 @@ TEST(integral_constant, implicitly_converts_to_the_given_value)
 {
     auto ic = sut::integral_constant<some_integral_type, some_integral_value>{};
 
-    some_integral_type value = ic;
+    constexpr some_integral_type value = ic;
 
-    ASSERT_THAT(value, Eq(some_integral_value));
+    static_assert(value == some_integral_value);
 }
 
 TEST(integral_constant, returns_the_given_value_when_called)
 {
     auto ic = sut::integral_constant<some_integral_type, some_integral_value>{};
 
-    some_integral_type value = ic();
+    constexpr some_integral_type value = ic();
 
-    ASSERT_THAT(value, Eq(some_integral_value));
+    static_assert(value == some_integral_value);
 }
 
 TEST(bool_constant, is_an_integral_constant_with_type_bool)
@@ -108,7 +108,7 @@ TEST(true_type, has_value_true)
     using tt = sut::true_type;
 
     StaticAssertTypeEq<tt::value_type, bool>();
-    ASSERT_TRUE(tt::value);
+    static_assert(tt::value);
 }
 
 TEST(false_type, has_value_false)
@@ -116,5 +116,5 @@ TEST(false_type, has_value_false)
     using ft = sut::false_type;
 
     StaticAssertTypeEq<ft::value_type, bool>();
-    ASSERT_FALSE(ft::value);
+    static_assert(!ft::value);
 }
