@@ -14,6 +14,14 @@ using some_integral_type = unsigned long;
 constexpr some_integral_type some_integral_value = 4042;
 constexpr bool some_bool_value = true;
 
+struct some_class_type {};
+union some_union_type {};
+enum some_enum_type {};
+enum class some_enum_class_type {};
+
+struct some_non_trivial_type {some_non_trivial_type() {}};
+struct some_non_standard_layout_type {int i; private: int j;};
+
 }
 
 TEST(remove_reference, keeps_non_reference_type_intact)
@@ -117,4 +125,243 @@ TEST(false_type, has_value_false)
 
     StaticAssertTypeEq<ft::value_type, bool>();
     static_assert(!ft::value);
+}
+
+TEST(is_union, is_true_for_unions)
+{
+    static_assert(sut::is_union_v<some_union_type>);
+}
+
+TEST(is_union, is_false_for_classes)
+{
+    static_assert(!sut::is_union_v<some_class_type>);
+}
+
+TEST(is_union, is_false_for_integrals)
+{
+    static_assert(!sut::is_union_v<some_integral_type>);
+}
+
+TEST(is_class, is_true_for_classes)
+{
+    static_assert(sut::is_class_v<some_class_type>);
+}
+
+TEST(is_class, is_false_for_unions)
+{
+    static_assert(!sut::is_class_v<some_union_type>);
+}
+
+TEST(is_class, is_false_for_integrals)
+{
+    static_assert(!sut::is_class_v<some_integral_type>);
+}
+
+TEST(is_enum, is_true_for_enums)
+{
+    static_assert(sut::is_enum_v<some_enum_type>);
+}
+
+TEST(is_enum, is_true_for_enum_classes)
+{
+    static_assert(sut::is_enum_v<some_enum_class_type>);
+}
+
+TEST(is_enum, is_false_for_unions)
+{
+    static_assert(!sut::is_enum_v<some_union_type>);
+}
+
+TEST(is_enum, is_false_for_classes)
+{
+    static_assert(!sut::is_enum_v<some_class_type>);
+}
+
+TEST(is_enum, is_false_for_integrals)
+{
+    static_assert(!sut::is_enum_v<some_integral_type>);
+}
+
+TEST(is_standard_layout, is_true_for_integral_types)
+{
+    static_assert(sut::is_standard_layout_v<some_integral_type>);
+}
+
+TEST(is_standard_layout, is_true_for_class_types_with_uniform_access_members)
+{
+    class some_class_type {int i;};
+
+    static_assert(sut::is_standard_layout_v<some_class_type>);
+}
+
+TEST(is_standard_layout, is_false_for_class_types_with_mixed_access_members)
+{
+
+    class some_class_type {int i; public: int j;};
+
+    static_assert(!sut::is_standard_layout_v<some_class_type>);
+}
+
+TEST(is_standard_layout, is_false_for_class_types_with_virtual_functions)
+{
+
+    class some_class_type {virtual void f() {}};
+
+    static_assert(!sut::is_standard_layout_v<some_class_type>);
+}
+
+TEST(is_standard_layout, is_false_for_class_types_with_virtual_bases)
+{
+    struct some_base_type {};
+    struct some_class_type : virtual some_base_type {};
+
+    static_assert(!sut::is_standard_layout_v<some_class_type>);
+}
+
+TEST(is_abstract, is_true_for_class_types_with_pure_virtual_functions)
+{
+    struct some_class_type {virtual void f() = 0;};
+
+    static_assert(sut::is_abstract_v<some_class_type>);
+}
+
+TEST(is_abstract, is_true_for_class_types_with_inherited_pure_virtual_functions)
+{
+    struct some_base_type {virtual void f() = 0;};
+    struct some_class_type : some_base_type {};
+
+    static_assert(sut::is_abstract_v<some_class_type>);
+}
+
+TEST(is_abstract, is_false_for_class_types_without_any_pure_virtual_functions)
+{
+    struct some_class_type {virtual void f() {}};
+
+    static_assert(!sut::is_abstract_v<some_class_type>);
+}
+
+TEST(is_abstract, is_false_for_union_types)
+{
+    static_assert(!sut::is_abstract_v<some_union_type>);
+}
+
+TEST(is_abstract, is_false_for_integral_types)
+{
+    static_assert(!sut::is_abstract_v<some_integral_type>);
+}
+
+TEST(is_empty, is_true_for_class_types_without_members_or_virtual_functions)
+{
+    struct some_class_type {};
+
+    static_assert(sut::is_empty_v<some_class_type>);
+}
+
+TEST(is_empty, is_false_for_class_types_with_non_static_members)
+{
+    struct some_class_type {int i;};
+
+    static_assert(!sut::is_empty_v<some_class_type>);
+}
+
+TEST(is_empty, is_false_for_class_types_with_virtual_functions)
+{
+    struct some_class_type {virtual void f() {}};
+
+    static_assert(!sut::is_empty_v<some_class_type>);
+}
+
+TEST(is_empty, is_false_for_union_types)
+{
+    static_assert(!sut::is_empty_v<some_union_type>);
+}
+
+TEST(is_empty, is_false_for_integral_types)
+{
+    static_assert(!sut::is_empty_v<some_integral_type>);
+}
+
+TEST(is_trivial, is_true_for_trivial_class_types)
+{
+    struct some_class_type {};
+
+    static_assert(sut::is_trivial_v<some_class_type>);
+}
+
+TEST(is_trivial, is_true_for_integral_types)
+{
+    static_assert(sut::is_trivial_v<some_integral_type>);
+}
+
+TEST(is_trivial, is_false_for_class_types_with_non_default_default_constructor)
+{
+    struct some_class_type {some_class_type() {}};
+
+    static_assert(!sut::is_trivial_v<some_class_type>);
+}
+
+TEST(is_trivial, is_false_for_class_types_with_non_default_copy_constructor)
+{
+    struct some_class_type {some_class_type(const some_class_type&) {}};
+
+    static_assert(!sut::is_trivial_v<some_class_type>);
+}
+
+TEST(is_trivial, is_false_for_class_types_with_virtual_functions)
+{
+    struct some_class_type {virtual void f() {}};
+
+    static_assert(!sut::is_trivial_v<some_class_type>);
+}
+
+TEST(is_trivial, is_false_for_class_types_with_non_trivial_non_static_members)
+{
+    struct some_non_trivial_class_type {virtual void f() {}};
+    struct some_class_type {some_non_trivial_class_type m;};
+
+    static_assert(!sut::is_trivial_v<some_class_type>);
+}
+
+TEST(is_pod, is_true_for_integral_types)
+{
+    static_assert(sut::is_pod_v<some_integral_type>);
+}
+
+TEST(is_pod, is_true_for_class_types_that_are_trivial_and_standard_layout)
+{
+    struct some_class_type {some_integral_type m;};
+
+    static_assert(sut::is_pod_v<some_class_type>);
+}
+
+TEST(is_pod, is_false_for_non_trivial_types)
+{
+    static_assert(!sut::is_pod_v<some_non_trivial_type>);
+}
+
+TEST(is_pod, is_false_for_non_standard_layout_types)
+{
+    static_assert(!sut::is_pod_v<some_non_standard_layout_type>);
+}
+
+TEST(is_polymorphic, is_true_for_class_types_with_virtual_functions)
+{
+    struct some_class_type {virtual void f() {}};
+
+    static_assert(sut::is_polymorphic_v<some_class_type>);
+}
+
+TEST(is_polymorphic, is_true_for_class_types_with_inherited_virtual_functions)
+{
+    struct some_base_class_type {virtual void f() {}};
+    struct some_class_type : some_base_class_type {};
+
+    static_assert(sut::is_polymorphic_v<some_class_type>);
+}
+
+TEST(is_polymorphic, is_false_for_class_types_without_virtual_functions)
+{
+    struct some_class_type {};
+
+    static_assert(!sut::is_polymorphic_v<some_class_type>);
 }

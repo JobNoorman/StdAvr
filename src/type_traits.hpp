@@ -24,6 +24,22 @@ using bool_constant = integral_constant<bool, B>;
 using true_type  = bool_constant<true>;
 using false_type = bool_constant<false>;
 
+#define INTRINSIC_TRAIT(name)                                           \
+    template<typename T> struct name : bool_constant<__##name(T)> {};   \
+    template<typename T> inline constexpr bool name##_v = name<T>::value
+
+INTRINSIC_TRAIT(is_union);
+INTRINSIC_TRAIT(is_class);
+INTRINSIC_TRAIT(is_enum);
+INTRINSIC_TRAIT(is_abstract);
+INTRINSIC_TRAIT(is_polymorphic);
+INTRINSIC_TRAIT(is_empty);
+INTRINSIC_TRAIT(is_standard_layout);
+INTRINSIC_TRAIT(is_trivial);
+INTRINSIC_TRAIT(is_pod);
+
+#undef INTRINSIC_TRAIT
+
 template<typename T> struct remove_reference      {using type = T;};
 template<typename T> struct remove_reference<T&>  {using type = T;};
 template<typename T> struct remove_reference<T&&> {using type = T;};
