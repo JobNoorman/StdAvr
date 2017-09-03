@@ -365,3 +365,25 @@ TEST(is_polymorphic, is_false_for_class_types_without_virtual_functions)
 
     static_assert(!sut::is_polymorphic_v<some_class_type>);
 }
+
+TEST(is_base_of, is_true_for_a_class_and_a_subclass)
+{
+    struct some_subclass_type : some_class_type {};
+
+    static_assert(sut::is_base_of_v<some_class_type, some_subclass_type>);
+}
+
+TEST(is_base_of, is_true_for_a_class_and_itself)
+{
+    static_assert(sut::is_base_of_v<some_class_type, some_class_type>);
+}
+
+TEST(is_base_of, is_false_for_union_types)
+{
+    static_assert(!sut::is_base_of_v<some_union_type, some_union_type>);
+}
+
+TEST(is_base_of, is_false_for_integral_types)
+{
+    static_assert(!sut::is_base_of_v<some_integral_type, some_integral_type>);
+}

@@ -40,6 +40,12 @@ INTRINSIC_TRAIT(is_pod);
 
 #undef INTRINSIC_TRAIT
 
+template<class Base, class Derived>
+struct is_base_of : bool_constant<__is_base_of(Base, Derived)> {};
+
+template<class Base, class Derived>
+inline constexpr bool is_base_of_v = is_base_of<Base, Derived>::value;
+
 template<typename T> struct remove_reference      {using type = T;};
 template<typename T> struct remove_reference<T&>  {using type = T;};
 template<typename T> struct remove_reference<T&&> {using type = T;};
