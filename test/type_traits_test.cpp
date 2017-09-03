@@ -387,3 +387,24 @@ TEST(is_base_of, is_false_for_integral_types)
 {
     static_assert(!sut::is_base_of_v<some_integral_type, some_integral_type>);
 }
+
+TEST(enable_if, has_a_type_typedef_of_the_given_type_when_given_true)
+{
+    StaticAssertTypeEq<sut::enable_if_t<true, some_type>, some_type>();
+}
+
+namespace
+{
+template<bool B>
+constexpr bool enable_if_test(int) {return true;}
+
+template<bool B, typename = sut::enable_if_t<B>>
+constexpr bool enable_if_test(long) {return false;}
+}
+
+TEST(enable_if, does_not_have_a_type_typedef_when_given_false)
+{
+    // Since enable_if should not define the type typedef, SFINAE should disable
+    // the second overload although the provided argument is a better match.
+    static_assert(enable_if_test<false>(0l));
+}

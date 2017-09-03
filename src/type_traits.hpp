@@ -56,6 +56,15 @@ using remove_reference_t = typename remove_reference<T>::type;
 template<typename...>
 using void_t = void;
 
+template<bool B, typename T = void>
+struct enable_if {};
+
+template<typename T>
+struct enable_if<true, T> {using type = T;};
+
+template<bool B, typename T = void>
+using enable_if_t = typename enable_if<B, T>::type;
+
 }
 
 #endif
