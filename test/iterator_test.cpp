@@ -21,6 +21,26 @@ struct some_iterator
     using iterator_category = sut::forward_iterator_tag;
 };
 
+using some_forward_iterator = some_iterator;
+
+struct some_input_iterator
+{
+    using value_type = double;
+    using difference_type = char;
+    using pointer = long&;
+    using reference = const char*;
+    using iterator_category = sut::input_iterator_tag;
+};
+
+struct some_output_iterator
+{
+    using value_type = double;
+    using difference_type = char;
+    using pointer = long&;
+    using reference = const char*;
+    using iterator_category = sut::output_iterator_tag;
+};
+
 struct container_mock
 {
     MOCK_METHOD0(begin, some_type());
@@ -122,4 +142,41 @@ TEST(iterator_traits, supports_iterators)
     StaticAssertTypeEq<traits::reference, some_iterator::reference>();
     StaticAssertTypeEq<traits::iterator_category,
                        some_iterator::iterator_category>();
+}
+
+TEST(is_x_iterator, is_true_for_a_matching_iterator)
+{
+    static_assert(sut::detail::is_input_iterator_v<some_input_iterator>);
+}
+
+TEST(is_x_iterator, is_true_for_a_derived_iterator)
+{
+    static_assert(sut::detail::is_input_iterator_v<some_forward_iterator>);
+}
+
+TEST(is_x_iterator, is_false_for_an_unrelated_iterator)
+{
+    static_assert(!sut::detail::is_input_iterator_v<some_output_iterator>);
+}
+
+TEST(is_x_iterator, is_false_for_a_non_iterator)
+{
+    static_assert(!sut::detail::is_input_iterator_v<int>);
+}
+
+namespace
+{
+template<typename T>
+constexpr bool require_x_iterator_test(int) {return true;}
+
+template<typename T, typename = sut::detail::require_input_iterator<T>>
+constexpr bool require_x_iterator_test(long) {return false;}
+}
+
+TEST(require_x_iterator, supports_sfinae)
+{
+    // Since require_input_iterator should should disable the second overload,
+    // the first one should be called although although the provided argument is
+    // a better match for the second one.
+    static_assert(require_x_iterator_test<some_output_iterator>(0l));
 }

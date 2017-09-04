@@ -111,6 +111,33 @@ struct iterator_traits<const T*>
     using iterator_category = random_access_iterator_tag;
 };
 
+namespace detail
+{
+
+#define IS_X_ITERATOR(type)                                                 \
+    template<typename T, typename = void>                                   \
+    struct is_##type##_iterator : false_type {};                            \
+    template<typename T>                                                    \
+    struct is_##type##_iterator<                                            \
+        T, enable_if_t<is_base_of_v<type##_iterator_tag,                    \
+                                    typename T::iterator_category>>         \
+    > : true_type {};                                                       \
+    template<typename T>                                                    \
+    constexpr inline bool is_##type##_iterator_v =                          \
+        is_##type##_iterator<T>::value;                                     \
+    template<typename T>                                                    \
+    using require_##type##_iterator = enable_if_t<is_##type##_iterator_v<T>>
+
+IS_X_ITERATOR(input);
+IS_X_ITERATOR(output);
+IS_X_ITERATOR(forward);
+IS_X_ITERATOR(bidirectional);
+IS_X_ITERATOR(random_access);
+
+#undef IS_X_ITERATOR
+
+}
+
 }
 
 #endif
