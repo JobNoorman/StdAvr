@@ -120,9 +120,13 @@ namespace detail
     struct is_##type##_iterator : false_type {};                            \
     template<typename T>                                                    \
     struct is_##type##_iterator<                                            \
-        T, enable_if_t<is_base_of_v<                                        \
-                           type##_iterator_tag,                             \
-                           typename iterator_traits<T>::iterator_category>> \
+        T,                                                                  \
+        enable_if_t<                                                        \
+            is_base_of_v<                                                   \
+                type##_iterator_tag,                                        \
+                typename iterator_traits<T>::iterator_category              \
+            >                                                               \
+        >                                                                   \
     > : true_type {};                                                       \
     template<typename T>                                                    \
     constexpr inline bool is_##type##_iterator_v =                          \

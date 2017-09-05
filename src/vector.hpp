@@ -147,9 +147,9 @@ private:
     struct allocate_tag{};
 
     vector(allocate_tag, size_t count)
-    : data_{static_cast<value_type*>(
-                ::operator new[](count * sizeof(value_type)))},
-        size_{count}, capacity_{count}
+        : data_{static_cast<value_type*>(
+                    ::operator new[](count * sizeof(value_type)))},
+          size_{count}, capacity_{count}
     {
     }
 
