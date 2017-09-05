@@ -47,12 +47,8 @@ public:
             new (&element) T();
     }
 
-    vector(std::initializer_list<T> il) : vector{allocate_tag{}, il.size()}
+    vector(std::initializer_list<T> il) : vector(il.begin(), il.end())
     {
-        auto il_it = il.begin();
-
-        for (auto& element : *this)
-            new (&element) T(*il_it++);
     }
 
     vector(vector&& other) noexcept : data_{other.data_}, size_{other.size_}
