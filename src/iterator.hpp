@@ -66,16 +66,17 @@ namespace detail
 {
 
 template<typename Iterator, typename = void_t<>>
-struct iterator_traits
+struct iterator_class_traits
 {
 };
 
 template<typename Iterator>
-struct iterator_traits<Iterator, void_t<typename Iterator::iterator_category,
-                                        typename Iterator::value_type,
-                                        typename Iterator::difference_type,
-                                        typename Iterator::pointer,
-                                        typename Iterator::reference>>
+struct iterator_class_traits<Iterator,
+                             void_t<typename Iterator::iterator_category,
+                                    typename Iterator::value_type,
+                                    typename Iterator::difference_type,
+                                    typename Iterator::pointer,
+                                    typename Iterator::reference>>
 {
     using value_type        = typename Iterator::value_type;
     using difference_type   = typename Iterator::difference_type;
@@ -87,7 +88,7 @@ struct iterator_traits<Iterator, void_t<typename Iterator::iterator_category,
 } // namespace detail
 
 template<typename Iterator>
-struct iterator_traits : detail::iterator_traits<Iterator>
+struct iterator_traits : detail::iterator_class_traits<Iterator>
 {
 };
 
@@ -119,8 +120,9 @@ namespace detail
     struct is_##type##_iterator : false_type {};                            \
     template<typename T>                                                    \
     struct is_##type##_iterator<                                            \
-        T, enable_if_t<is_base_of_v<type##_iterator_tag,                    \
-                                    typename T::iterator_category>>         \
+        T, enable_if_t<is_base_of_v<                                        \
+                           type##_iterator_tag,                             \
+                           typename iterator_traits<T>::iterator_category>> \
     > : true_type {};                                                       \
     template<typename T>                                                    \
     constexpr inline bool is_##type##_iterator_v =                          \
@@ -136,7 +138,7 @@ IS_X_ITERATOR(random_access);
 
 #undef IS_X_ITERATOR
 
-}
+} // namespace detail
 
 }
 

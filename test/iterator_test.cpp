@@ -10,6 +10,7 @@ namespace
 {
 
 using some_type = int;
+using some_pointer_type = some_type*;
 some_type some_value = 53;
 
 struct some_iterator
@@ -162,6 +163,11 @@ TEST(is_x_iterator, is_false_for_an_unrelated_iterator)
 TEST(is_x_iterator, is_false_for_a_non_iterator)
 {
     static_assert(!sut::detail::is_input_iterator_v<int>);
+}
+
+TEST(is_x_iterator, supports_pointers)
+{
+    static_assert(sut::detail::is_random_access_iterator_v<some_pointer_type>);
 }
 
 namespace
