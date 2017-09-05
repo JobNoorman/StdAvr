@@ -14,6 +14,7 @@ const some_type some_value = 42;
 auto some_initializer_list = {2, 5, 1, 7, 5};
 auto some_vec1 = sut::vector{2, 4, 3, 8};
 auto some_vec2 = sut::vector{4, 2, 5, 6, 9, 0};
+const auto some_const_vec = sut::vector{4lu, 2lu, 5lu, 6lu, 9lu, 0lu};
 
 }
 
@@ -148,4 +149,18 @@ TEST(a_vector, contains_the_elements_from_the_given_iterator_range)
     auto vec = sut::vector(some_vec1.begin(), some_vec1.end());
 
     ASSERT_THAT(vec, ElementsAreArray(some_vec1));
+}
+
+TEST(a_vector, returns_first_element_for_front)
+{
+    auto front = some_vec1.front();
+
+    ASSERT_THAT(front, Eq(*some_vec1.begin()));
+}
+
+TEST(a_vector, returns_first_element_for_const_front)
+{
+    auto front = some_const_vec.front();
+
+    ASSERT_THAT(front, Eq(*some_const_vec.begin()));
 }

@@ -6,6 +6,7 @@
 #include "initializer_list.hpp"
 #include "iterator.hpp"
 #include "cstddef.hpp"
+#include "cassert.hpp"
 
 namespace STDAVR_NAMESPACE
 {
@@ -140,6 +141,18 @@ public:
         swap(data_, other.data_);
         swap(size_, other.size_);
         swap(capacity_, other.capacity_);
+    }
+
+    reference front()
+    {
+        return const_cast<reference>(const_cast<const vector*>(this)->front());
+    }
+
+    const_reference front() const
+    {
+        assert(!empty() && "front() called on empty vector");
+
+        return data_[0];
     }
 
 private:
