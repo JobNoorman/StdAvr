@@ -164,3 +164,17 @@ TEST(a_vector, returns_first_element_for_const_front)
 
     ASSERT_THAT(front, Eq(*some_const_vec.begin()));
 }
+
+TEST(a_vector, returns_last_element_for_back)
+{
+    auto back = some_vec1.back();
+
+    ASSERT_THAT(back, Eq(*(some_vec1.end() - 1)));
+}
+
+TEST(a_vector, returns_last_element_for_const_back)
+{
+    auto back = some_const_vec.back();
+
+    ASSERT_THAT(back, Eq(*(some_const_vec.end() - 1)));
+}

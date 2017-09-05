@@ -155,6 +155,18 @@ public:
         return data_[0];
     }
 
+    reference back()
+    {
+        return const_cast<reference>(const_cast<const vector*>(this)->back());
+    }
+
+    const_reference back() const
+    {
+        assert(!empty() && "back() called on empty vector");
+
+        return data_[size() - 1];
+    }
+
 private:
 
     struct allocate_tag{};
