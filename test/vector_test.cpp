@@ -142,3 +142,10 @@ TEST(a_vector, has_the_same_elements_as_the_other_vector_after_std_swap)
     ASSERT_THAT(vec1, ElementsAreArray(some_vec2));
     ASSERT_THAT(vec2, ElementsAreArray(some_vec1));
 }
+
+TEST(a_vector, contains_the_elements_from_the_given_iterator_range)
+{
+    auto vec = sut::vector(some_vec1.begin(), some_vec1.end());
+
+    ASSERT_THAT(vec, ElementsAreArray(some_vec1));
+}

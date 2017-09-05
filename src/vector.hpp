@@ -4,6 +4,7 @@
 #include "namespace.hpp"
 #include "utility.hpp"
 #include "initializer_list.hpp"
+#include "iterator.hpp"
 #include "cstddef.hpp"
 
 namespace STDAVR_NAMESPACE
@@ -58,6 +59,16 @@ public:
     {
         other.data_ = nullptr;
         other.size_ = 0;
+    }
+
+    template<typename InputIt,
+             typename = detail::require_input_iterator<InputIt>>
+    vector(InputIt first, InputIt last) : vector(allocate_tag{}, last - first)
+    {
+        auto it = first;
+
+        for (auto& element : *this)
+            new (&element) T(*it++);
     }
 
     ~vector()
@@ -150,6 +161,10 @@ private:
     size_type size_;
     size_type capacity_;
 };
+
+template<typename InputIt>
+vector(InputIt, InputIt)
+    -> vector<typename iterator_traits<InputIt>::value_type>;
 
 template<class T>
 void swap(vector<T>& lhs, vector<T>& rhs) noexcept(noexcept(lhs.swap(rhs)))
