@@ -13,8 +13,10 @@ const sut::size_t some_size = 5;
 const some_type some_value = 42;
 auto some_initializer_list = {2, 5, 1, 7, 5};
 auto some_vec1 = sut::vector{2, 4, 3, 8};
+auto some_vec1_index = decltype(some_vec1)::size_type{2};
 auto some_vec2 = sut::vector{4, 2, 5, 6, 9, 0};
 const auto some_const_vec = sut::vector{4lu, 2lu, 5lu, 6lu, 9lu, 0lu};
+auto some_const_vec_index = decltype(some_const_vec)::size_type{4};
 
 }
 
@@ -177,4 +179,18 @@ TEST(a_vector, returns_last_element_for_const_back)
     auto back = some_const_vec.back();
 
     ASSERT_THAT(back, Eq(*(some_const_vec.end() - 1)));
+}
+
+TEST(a_vector, returns_the_element_at_the_given_index_for_for_array_access)
+{
+    auto element = some_vec1[some_vec1_index];
+
+    ASSERT_THAT(element, Eq(*(some_vec1.begin() + some_vec1_index)));
+}
+
+TEST(a_vector, returns_the_element_at_the_given_index_for_for_const_array_access)
+{
+    auto element = some_const_vec[some_const_vec_index];
+
+    ASSERT_THAT(element, Eq(*(some_const_vec.begin() + some_const_vec_index)));
 }

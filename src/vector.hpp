@@ -167,6 +167,18 @@ public:
         return data_[size() - 1];
     }
 
+    reference operator[](size_type pos)
+    {
+        return const_cast<reference>(const_cast<const vector&>(*this)[pos]);
+    }
+
+    const_reference operator[](size_type pos) const
+    {
+        assert(pos < size() && "operator[] index out of range");
+
+        return data_[pos];
+    }
+
 private:
 
     struct allocate_tag{};
