@@ -7,6 +7,7 @@
 #include "iterator.hpp"
 #include "cstddef.hpp"
 #include "cassert.hpp"
+#include "cstdlib.hpp"
 
 namespace STDAVR_NAMESPACE
 {
@@ -177,6 +178,19 @@ public:
         assert(pos < size() && "operator[] index out of range");
 
         return data_[pos];
+    }
+
+    reference at(size_type pos)
+    {
+        return const_cast<reference>(const_cast<const vector*>(this)->at(pos));
+    }
+
+    const_reference at(size_type pos) const
+    {
+        if (pos >= size())
+            abort();
+
+        return (*this)[pos];
     }
 
 private:

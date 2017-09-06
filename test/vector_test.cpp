@@ -194,3 +194,17 @@ TEST(a_vector, returns_the_element_at_the_given_index_for_for_const_array_access
 
     ASSERT_THAT(element, Eq(*(some_const_vec.begin() + some_const_vec_index)));
 }
+
+TEST(a_vector, returns_the_element_at_the_given_index_for_for_at)
+{
+    auto element = some_vec1.at(some_vec1_index);
+
+    ASSERT_THAT(element, Eq(*(some_vec1.begin() + some_vec1_index)));
+}
+
+TEST(a_vector, returns_the_element_at_the_given_index_for_for_const_at)
+{
+    auto element = some_const_vec.at(some_const_vec_index);
+
+    ASSERT_THAT(element, Eq(*(some_const_vec.begin() + some_const_vec_index)));
+}
