@@ -27,6 +27,7 @@ endfunction()
 
 publish_header(cstddef)
 publish_header(cstdint)
+publish_header(cstdlib)
 publish_header(cassert)
 publish_header(type_traits)
 publish_header(utility)
