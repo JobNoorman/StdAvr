@@ -53,10 +53,12 @@ public:
     {
     }
 
-    vector(vector&& other) noexcept : data_{other.data_}, size_{other.size_}
+    vector(vector&& other) noexcept
+        : data_{other.data_}, size_{other.size_}, capacity_{other.capacity_}
     {
         other.data_ = nullptr;
         other.size_ = 0;
+        other.capacity_ = 0;
     }
 
     template<typename InputIt,
@@ -103,6 +105,11 @@ public:
     bool empty() const noexcept
     {
         return size() == 0;
+    }
+
+    size_type capacity() const noexcept
+    {
+        return capacity_;
     }
 
     iterator begin() noexcept

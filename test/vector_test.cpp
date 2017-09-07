@@ -34,6 +34,13 @@ TEST(a_vector, has_the_given_size_when_constructed)
     ASSERT_THAT(vec.size(), Eq(some_size));
 }
 
+TEST(a_vector, has_at_least_the_given_size_as_capacity_when_constructed)
+{
+    auto vec = sut::vector<some_type>(some_size, some_value);
+
+    ASSERT_THAT(vec.capacity(), Ge(some_size));
+}
+
 TEST(a_vector, contains_count_elements_equal_to_the_given_value)
 {
     auto vec = sut::vector<some_type>(3, some_value);
@@ -47,8 +54,6 @@ TEST(a_vector, contains_count_default_constructed_elements_when_no_value_given)
 
     ASSERT_THAT(vec, ElementsAreArray({some_type{}, some_type{}, some_type{}}));
 }
-
-
 
 TEST(a_vector, has_the_same_elements_as_the_source_vector_it_was_copied_from)
 {
@@ -83,6 +88,18 @@ TEST(a_vector, has_the_same_elements_as_the_source_vector_it_was_moved_from)
     ASSERT_THAT(vec, ElementsAreArray(source_copy));
 }
 
+// This is not a formal requirement but probably what most people would want
+// from the move constructor.
+TEST(a_vector, has_the_same_capacity_as_the_source_vector_it_was_moved_from)
+{
+    auto source_vec = sut::vector(some_initializer_list);
+    auto source_capacity = source_vec.capacity();
+
+    auto vec = sut::vector(std::move(source_vec));
+
+    ASSERT_THAT(vec.capacity(), Eq(source_capacity));
+}
+
 TEST(a_vector, is_empty_after_being_moved_from)
 {
     auto source_vec = sut::vector(some_initializer_list);
@@ -90,6 +107,17 @@ TEST(a_vector, is_empty_after_being_moved_from)
     sut::vector(std::move(source_vec));
 
     ASSERT_TRUE(source_vec.empty());
+}
+
+// This is not a formal requirement but probably what most people would want
+// from the move constructor.
+TEST(a_vector, has_zero_capacity_after_being_moved_from)
+{
+    auto source_vec = sut::vector(some_initializer_list);
+
+    sut::vector(std::move(source_vec));
+
+    ASSERT_THAT(source_vec.capacity(), Eq(0u));
 }
 
 TEST(a_vector, has_the_same_elements_as_the_source_vector_it_was_assigned_from)
@@ -111,6 +139,31 @@ TEST(a_vector, has_the_same_elements_as_the_source_vector_it_was_move_assigned_f
     vec = std::move(source_vec);
 
     ASSERT_THAT(vec, ElementsAreArray(source_copy));
+}
+
+// This is not a formal requirement but probably what most people would want
+// from move assignment.
+TEST(a_vector, has_the_same_capacity_as_the_source_vector_it_was_move_assigned_from)
+{
+    auto source_vec = sut::vector(some_initializer_list);
+    auto source_capacity = source_vec.capacity();
+
+    decltype(source_vec) vec;
+    vec = std::move(source_vec);
+
+    ASSERT_THAT(vec.capacity(), Eq(source_capacity));
+}
+
+// This is not a formal requirement but probably what most people would want
+// from move assignment.
+TEST(a_vector, has_capacity_zero_after_being_move_assigned_from)
+{
+    auto source_vec = sut::vector(some_initializer_list);
+
+    decltype(source_vec) vec;
+    vec = std::move(source_vec);
+
+    ASSERT_THAT(source_vec.capacity(), Eq(0u));
 }
 
 TEST(a_vector, has_the_same_elements_as_the_source_initializer_list_it_was_assigned_from)
@@ -135,6 +188,19 @@ TEST(a_vector, has_the_same_elements_as_the_other_vector_after_swap)
     ASSERT_THAT(vec2, ElementsAreArray(some_vec1));
 }
 
+// This is not a formal requirement but probably what most people would want
+// from a swap.
+TEST(a_vector, has_the_same_capacity_as_the_other_vector_after_swap)
+{
+    auto vec1 = some_vec1;
+    auto vec2 = some_vec2;
+
+    vec1.swap(vec2);
+
+    ASSERT_THAT(vec1.capacity(), Eq(some_vec2.capacity()));
+    ASSERT_THAT(vec2.capacity(), Eq(some_vec1.capacity()));
+}
+
 TEST(a_vector, has_the_same_elements_as_the_other_vector_after_std_swap)
 {
     auto vec1 = some_vec1;
@@ -144,6 +210,19 @@ TEST(a_vector, has_the_same_elements_as_the_other_vector_after_std_swap)
 
     ASSERT_THAT(vec1, ElementsAreArray(some_vec2));
     ASSERT_THAT(vec2, ElementsAreArray(some_vec1));
+}
+
+// This is not a formal requirement but probably what most people would want
+// from a swap.
+TEST(a_vector, has_the_same_capacity_as_the_other_vector_after_std_swap)
+{
+    auto vec1 = some_vec1;
+    auto vec2 = some_vec2;
+
+    sut::swap(vec1, vec2);
+
+    ASSERT_THAT(vec1.capacity(), Eq(some_vec2.capacity()));
+    ASSERT_THAT(vec2.capacity(), Eq(some_vec1.capacity()));
 }
 
 TEST(a_vector, contains_the_elements_from_the_given_iterator_range)
