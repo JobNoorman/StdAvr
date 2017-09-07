@@ -208,3 +208,19 @@ TEST(a_vector, returns_the_element_at_the_given_index_for_for_const_at)
 
     ASSERT_THAT(element, Eq(*(some_const_vec.begin() + some_const_vec_index)));
 }
+
+TEST(a_vector, returns_a_pointer_to_an_array_containing_all_element_for_data)
+{
+    auto data = some_vec1.data();
+    auto data_vec = sut::vector(data, data + some_vec1.size());
+
+    ASSERT_THAT(data_vec, ElementsAreArray(some_vec1));
+}
+
+TEST(a_vector, returns_a_pointer_to_an_array_containing_all_element_for_const_data)
+{
+    auto data = some_const_vec.data();
+    auto data_vec = sut::vector(data, data + some_const_vec.size());
+
+    ASSERT_THAT(data_vec, ElementsAreArray(some_const_vec));
+}

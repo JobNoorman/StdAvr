@@ -193,6 +193,16 @@ public:
         return (*this)[pos];
     }
 
+    T* data() noexcept
+    {
+        return const_cast<T*>(const_cast<const vector*>(this)->data());
+    }
+
+    const T* data() const noexcept
+    {
+        return data_;
+    }
+
 private:
 
     struct allocate_tag{};
